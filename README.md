@@ -103,7 +103,7 @@ $env:JAVA_HOME="C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot"
 .\gradlew.bat --no-daemon buildIndex
 ```
 
-It rewrites `D:\tvstore\tv-index\index.json` and `index.min.json`. A full run is ~200
+It rewrites `D:\tv-index\index.json` and `index.min.json`. A full run is ~200
 requests and ~3–4 minutes against the anonymous `play.google.com` `batchexecute` lane.
 
 Refresh cadence: weekly is plenty. Play's TV home streams rotate slowly; the package
