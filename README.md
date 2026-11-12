@@ -11,8 +11,8 @@ catalogue, so the client needs its own list of TV-capable packages. This repo is
 
 | File | Size | Purpose |
 |---|---|---|
-| `index.json` | ~3 MB | Full metadata, one object per app. Use for details/offline fallback. |
-| `index.min.json` | ~430 KB | Trimmed to the fields a browse/search grid needs. Use at startup. |
+| `index.json` | ~4 MB | Full metadata, one object per app. Use for details/offline fallback. |
+| `index.min.json` | ~660 KB | Trimmed to the fields a browse/search grid needs. Use at startup. |
 
 Both are regenerated together. Fetch from `raw.githubusercontent.com` and cache locally;
 there is no per-request API.
@@ -26,12 +26,12 @@ there is no per-request API.
   "generator": "tvstore-spike/IndexBuilder",
   "playLocale": "en_US",
   "stats": {
-    "apps": 879,
+    "apps": 1215,
     "requests": 205,
-    "searchQueries": 40,
+    "searchQueries": 77,
     "durationSeconds": 201,
     "bySource": { "tv-apps": 74, "tv-games": 79, "search:tv": 58 /* ... */ },
-    "bySignal": { "pkg-dot-tv": 605, "storefront:tv-apps": 74 /* ... */ }
+    "bySignal": { "pkg-dot-tv": 866, "storefront:tv-apps": 74 /* ... */ }
   },
   "apps": [
     {
@@ -79,7 +79,7 @@ Two independent sources, recorded in `sources`:
 1. **TV storefront** — the app appeared in Play's TV app or TV games home stream, including
    pagination. Play itself considers these TV-compatible. Signalled as
    `storefront:tv-apps` / `storefront:tv-games`.
-2. **Filtered search** — the app appeared in one of 40 Play searches and its package name
+2. **Filtered search** — the app appeared in one of 77 Play searches and its package name
    matched a TV heuristic. Signalled by the rule that matched:
    - `pkg-dot-tv` — contains `.tv` (e.g. `com.google.android.youtube.tv`)
    - `pkg-tv-prefix` — starts with `tv.` (e.g. `tv.pluto.android`)
@@ -87,6 +87,11 @@ Two independent sources, recorded in `sources`:
    - `pkg-leanback` — contains `.leanback`
    - `pkg-livingroom` — contains `.livingroom` (e.g. `com.amazon.amazonvideo.livingroom`)
    - `pkg-ninja` — ends with `.ninja` (e.g. `com.netflix.ninja`)
+
+   The search set is topic queries (`tv`, `android tv`, genres, streaming brands) plus a
+   full `tv a`–`tv z` / `tv 0`–`tv 9` sweep. Play ranks each whole query differently, so
+   the sweep surfaces a different slice of the catalogue than bare `tv` (30–100 matches
+   per letter).
 
 Storefront membership is authoritative. Package signals are a cheap bootstrap and can
 produce false positives (phone-only TV-remote or casting apps, games published under a
@@ -103,8 +108,8 @@ $env:JAVA_HOME="C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot"
 .\gradlew.bat --no-daemon buildIndex
 ```
 
-It rewrites `D:\tv-index\index.json` and `index.min.json`. A full run is ~200
-requests and ~3–4 minutes against the anonymous `play.google.com` `batchexecute` lane.
+It rewrites `D:\tv-index\index.json` and `index.min.json`. A full run is ~390
+requests and ~6 minutes against the anonymous `play.google.com` `batchexecute` lane.
 
 Refresh cadence: weekly is plenty. Play's TV home streams rotate slowly; the package
 heuristics do not expire.
@@ -114,8 +119,8 @@ heuristics do not expire.
 This repo: <https://github.com/LagTech123/tv-index>
 
 ```
-https://raw.githubusercontent.com/LagTech123/tv-index/main/index.min.json   # ~430 KB
-https://raw.githubusercontent.com/LagTech123/tv-index/main/index.json       # ~3 MB
+https://raw.githubusercontent.com/LagTech123/tv-index/main/index.min.json   # ~660 KB
+https://raw.githubusercontent.com/LagTech123/tv-index/main/index.json       # ~4 MB
 ```
 
 Raw GitHub responses are cached for 5 minutes (`cache-control: max-age=300`), so the client
