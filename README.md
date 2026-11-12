@@ -109,24 +109,18 @@ requests and ~3–4 minutes against the anonymous `play.google.com` `batchexecut
 Refresh cadence: weekly is plenty. Play's TV home streams rotate slowly; the package
 heuristics do not expire.
 
-## Pushing to GitHub
+## Live URLs
 
-Nothing in this directory has been committed yet. On a machine with `git`:
-
-```bash
-cd tv-index
-git init
-git add index.json index.min.json README.md
-git commit -m "TV app index: 879 apps"
-git remote add origin git@github.com:<owner>/tv-index.git
-git push -u origin main
-```
-
-Then point the client at, e.g.:
+This repo: <https://github.com/LagTech123/tv-index>
 
 ```
-https://raw.githubusercontent.com/<owner>/tv-index/main/index.min.json
+https://raw.githubusercontent.com/LagTech123/tv-index/main/index.min.json   # ~430 KB
+https://raw.githubusercontent.com/LagTech123/tv-index/main/index.json       # ~3 MB
 ```
+
+Raw GitHub responses are cached for 5 minutes (`cache-control: max-age=300`), so the client
+should still keep its own on-disk copy and only re-fetch when `generatedAt` is older than
+its refresh window.
 
 ## Caveats
 
